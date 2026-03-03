@@ -5,3 +5,5 @@ resources:
   - app-of-apps.yaml
   - metrics-server.yaml
   - kube-prometheus-stack.yaml
+  - loki.yaml
+  - tempo.yaml

@@ -1,0 +1,21 @@
+tempo:
+  auth_enabled: false
+
+replicas: 1
+
+service:
+  type: ClusterIP
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 100Mi
+  limits:
+    cpu: 200m
+    memory: 200Mi
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /var/tempo/traces
