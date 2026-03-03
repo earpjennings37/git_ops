@@ -1,0 +1,99 @@
+# ============================
+# GRAFANA (CHEAP MODE)
+# ============================
+
+# Access Grafana 2 ways:
+# command line:kubectl port-forward svc/kube-prometheus-stack-grafana -n monitoring 3000:80 & then http://localhost:3000
+# in k9: svc, shift-f, :secrets, x 
+grafana:
+  enabled: true
+  adminPassword: "admin"
+
+  # No AWS LoadBalancer
+  service:
+    type: ClusterIP
+
+  # Reduce resource usage
+  resources:
+    requests:
+      cpu: 50m
+      memory: 100Mi
+    limits:
+      cpu: 200m
+      memory: 200Mi
+
+
+# ============================
+# PROMETHEUS (CHEAP MODE)
+# ============================
+prometheus:
+  service:
+    type: ClusterIP
+
+  prometheusSpec:
+    # Minimal retention to reduce EBS cost
+    retention: 24h
+
+    # Smallest safe storage volume
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+
+    # Reduce CPU/memory footprint
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+      limits:
+        cpu: 300m
+        memory: 400Mi
+
+
+# ============================
+# ALERTMANAGER (DISABLED)
+# ============================
+alertmanager:
+  enabled: false
+
+
+# ============================
+# NODE EXPORTER (CHEAP MODE)
+# ============================
+nodeExporter:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+    limits:
+      cpu: 50m
+      memory: 50Mi
+
+
+# ============================
+# KUBE STATE METRICS (CHEAP MODE)
+# ============================
+kubeStateMetrics:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 50Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
+
+
+# ============================
+# PROMETHEUS OPERATOR (CHEAP MODE)
+# ============================
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 50Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
